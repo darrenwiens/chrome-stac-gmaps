@@ -1,0 +1,11 @@
+{
+    "appName": {
+        "message": "gmaps-stac"
+    },
+    "appShortName": {
+        "message": "gmaps-stac"
+    },
+    "appDescription": {
+        "message": "Adds STAC functionality to Google Maps"
+    }
+}

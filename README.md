@@ -4,7 +4,13 @@ Adds STAC functionality to Google Maps through a Chrome Extension
 
 ## Personal Deployment
 
-TODO
+1. `npm install`
+2. `npm run build`
+3. `cp src/materialize/js/nouislider.min.js dist/materialize/js/nouislider.min.js` (something gets borked trying to `build` that file)
+4. Go to [chrome://extensions/](chrome://extensions/)
+5. `Load unpacked` (select `dist` folder here)
+6. Go to [Google Maps](https://www.google.com/maps)
+7. Click on the extension, either in extensions drop down or pinned to toolbar
 
 ## Development 
 

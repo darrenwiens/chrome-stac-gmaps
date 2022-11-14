@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            background-color: rgb(215, 243, 255);
+        }
+
+        .label {
+            font: 400 12px Arial;
+            color: #888;
+            display: block;
+            margin: 15px 0;
+        }
+
+        .noUi-tooltip > span {
+            display: none !important;
+        }
+
+        .imgComp {
+            position: relative;
+        }
+
+        .imgSpan {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            z-index: 100;
+            background-color: rgb(215, 243, 255);
+            opacity: 75%
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css" media="screen,projection" />
+    <link rel="stylesheet" href="materialize/css/nouislider.css">
+    
+</head>
+
+<body>
+    <nav class="light-blue lighten-1" role="navigation">
+        <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">STAC Query</a>
+            <ul class="right hide-on-med-and-down">
+                <li><a href="#">Navbar Link</a></li>
+            </ul>
+
+            <ul id="nav-mobile" class="sidenav">
+                <li><a href="#">Navbar Link</a></li>
+            </ul>
+            <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        </div>
+    </nav>
+    <div class="section no-pad-bot" id="index-banner">
+        <div class="container">
+            <div class="row center">
+                <h5 class="header col s12 light">Choose dates below to get started</h5>
+            </div>
+            <div class="row center">
+                <div id="date-slider"></div>
+                <span class="label" id="event-start"></span>
+                <span class="label" id="event-end"></span>
+            </div>
+            <div class="row center">
+                <button id="queryBtn" class="btn waves-effect waves-light" type="submit" name="action">Submit
+                    <i class="material-icons right">send</i>
+                </button>
+            <div>
+            <br><br>
+
+        </div>
+    </div>
+    <div id="imgs"></div>
+    <script src="./materialize/js/materialize.min.js"></script>
+    <script src="./materialize/js/nouislider.min.js"></script>
+    <script src="./popup.js"></script>
+</body>
+
+</html>

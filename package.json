@@ -1,0 +1,74 @@
+{
+    "name": "gmaps-stac",
+    "description": "Adds STAC functionality to Google Maps",
+    "version": "0.0.1",
+    "homepage": "http://chrome.google.com/webstore",
+    "author": "Darren Wiens",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/darrenwiens/chrome-stac-gmaps"
+    },
+    "scripts": {
+        "start": "xt-build -e dev -w",
+        "start:firefox": "xt-build -e dev -p firefox -w",
+        "build": "xt-build -e prod",
+        "build:firefox": "xt-build -e prod -p firefox",
+        "clean": "xt-clean",
+        "docs": "xt-docs",
+        "test": "xt-test",
+        "coverage": "nyc --reporter=lcov npm run test",
+        "sync": "xt-sync"
+    },
+    "babel": {
+        "presets": [
+            "@babel/preset-env"
+        ]
+    },
+    "eslintIgnore": [
+        "test/**/*"
+    ],
+    "devDependencies": {
+        "extension-cli": "latest"
+    },
+    "xtdocs": {
+        "source": {
+            "include": [
+                "README.md",
+                "src"
+            ]
+        }
+    },
+    "xtbuild": {
+        "js_bundles": [
+            {
+                "name": "background",
+                "src": "./src/index.js"
+            },
+            {
+                "name": "content",
+                "src": "./src/content.js"
+            },
+            {
+                "name": "popup",
+                "src": "./src/popup.js"
+            },
+            {
+                "name": "materialize/js/materialize.min",
+                "src": "./src/materialize/js/materialize.min.js"
+            }
+        ],
+        "scss_bundles": [
+            {
+                "name": "materialize/css/nouislider",
+                "src": "./src/materialize/css/nouislider.css"
+            },
+            {
+                "name": "materialize/css/materialize.min",
+                "src": "./src/materialize/css/materialize.min.css"
+            }
+        ]
+    },
+    "dependencies": {
+        "materialize-css": "^1.0.0-rc.2"
+    }
+}

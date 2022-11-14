@@ -1,6 +1,6 @@
-# gmaps-stac
+# chrome-gmaps-stac
 
-Adds STAC functionality to Google Maps through a Chrome Extension
+A Chrome Extension that adds STAC functionality to Google Maps
 
 ## Personal Deployment
 

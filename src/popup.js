@@ -2,8 +2,38 @@ btnEl = document.getElementById("queryBtn")
 btnEl.addEventListener("click", query);
 
 let imgsEl = document.getElementById("imgs")
-
+let colSelect = document.getElementById('collections-select');
+let colSelectInstance;
 var dateSlider = document.getElementById('date-slider');
+
+let supportedCollections = [
+    'landsat-c2-l2'
+]
+
+document.addEventListener('DOMContentLoaded', function () {
+    var colSelect = document.getElementById('collections-select');
+
+    var requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
+    };
+
+    fetch("https://planetarycomputer.microsoft.com/api/stac/v1/collections", requestOptions)
+        .then(response => response.text())
+        .then(result => {
+            JSON.parse(result).collections.forEach((collection) => {
+                let opt = document.createElement('option');
+                opt.value = collection.id;
+                opt.innerHTML = collection.title;
+
+                if (supportedCollections.includes(collection.id)) {
+                    colSelect.appendChild(opt);
+                }
+            })
+            colSelectInstance = M.FormSelect.init(colSelect)
+        })
+        .catch(error => console.log('error', error));
+});
 
 function timestamp(str) {
     return new Date(str).getTime();
@@ -61,6 +91,7 @@ function query() {
             myHeaders.append("Content-Type", "application/json");
 
             var raw = JSON.stringify({
+                "collections": colSelectInstance.getSelectedValues(),
                 "bbox": bbox,
                 "datetime": `${startFormattedDate}/${endFormattedDate}`,
                 "intersects": null,
@@ -68,13 +99,7 @@ function query() {
                     "eo:cloud_cover": {
                         "lt": 50
                     }
-                },
-                "sort": [
-                    {
-                        "field": "eo:cloud_cover",
-                        "direction": "desc"
-                    }
-                ]
+                }
             });
 
             var requestOptions = {
@@ -84,29 +109,45 @@ function query() {
                 redirect: 'follow'
             };
 
-            fetch("https://earth-search.aws.element84.com/v0/search", requestOptions)
+            fetch("https://planetarycomputer.microsoft.com/api/stac/v1/search", requestOptions)
                 .then(response => response.text())
                 .then(result => {
-                    
+
                     imgsEl.innerHTML = '';
                     JSON.parse(result).features.forEach((feature) => {
-                        let imgEl = document.createElement('img')
-                        imgEl.src = feature.assets.thumbnail.href
-                        imgEl.classList.add('materialboxed', 'row', 'center');
-                        imgEl.setAttribute("data-caption", feature.properties.datetime)
-                        
+                        Object.entries(feature.assets).forEach(([key, asset]) => {
+                            if ("roles" in asset && asset.roles.includes('overview')) {
+                                let imgEl = document.createElement('img')
+                                let width = parseInt(document.body.clientWidth * 0.75);
+                                imgEl.src = asset.href + `&max_size=${width}`
+                                imgEl.classList.add('materialboxed', 'row', 'center');
+                                imgEl.setAttribute("data-caption", feature.properties.datetime)
 
-                        let imgCompEl = document.createElement('div')
-                        imgCompEl.classList.add('imgComp', 'row', 'center');
-                        let imgCaptionEl = document.createElement('span')
-                        imgCaptionEl.innerText = feature.properties.datetime
-                        imgCaptionEl.classList.add('imgSpan', 'row', 'center');
-                        imgCompEl.append(imgEl)
-                        imgCompEl.append(imgCaptionEl)
-                        
-                        imgsEl.append(imgCompEl)
+                                let imgCompEl = document.createElement('div')
+                                imgCompEl.classList.add('imgComp', 'row', 'center');
+                                
+                                let imgMetaEl = document.createElement('div')
+                                imgMetaEl.classList.add('imgMeta');
+                                let imgDateEl = document.createElement('span')
+                                imgDateEl.innerText = feature.properties.datetime
+                                imgDateEl.classList.add('imgSpan', 'row');
+                                let imgMapLinkEl = document.createElement('a')
+                                imgMapLinkEl.href = `https://planetarycomputer.microsoft.com/api/data/v1/item/map?collection=${feature.collection}&item=${feature.id}`
+                                imgMapLinkEl.innerText = 'Map'
+                                imgMapLinkEl.setAttribute('target', "_blank")
+                                imgMapLinkEl.classList.add('imgSpan', 'row', 'left');
+                                
+                                imgMetaEl.append(imgDateEl)
+                                imgMetaEl.append(imgMapLinkEl)
+                                imgCompEl.append(imgEl)
+                                imgCompEl.append(imgMetaEl)
 
-                        M.Materialbox.init(imgEl);
+                                imgsEl.append(imgCompEl)
+
+                                M.Materialbox.init(imgEl);
+                            }
+                        })
+
                     });
 
                 })
